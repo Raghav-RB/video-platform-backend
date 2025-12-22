@@ -2,7 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { Tweet } from "../models/tweet.models.js";
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 
 const createTweet = asyncHandler(async(req,res)=>{
     const {content} = req.body
@@ -244,8 +244,70 @@ const getTweetbyUserId = asyncHandler(async(req,res)=>{
     )
 })
 
+const deleteTweet = asyncHandler(async(req,res)=>{
+    const {tweetId} = req.params
+
+    if(!tweetId || !mongoose.Types.ObjectId.isValid(tweetId)){
+        throw new ApiError(400 , "Tweet id required")
+    }
+
+    const tweet = await Tweet.findById(tweetId)
+
+    if(!tweet){
+        throw new ApiError(404 , "Tweet not found")
+    }
+
+    if(tweet.owner.toString()!==req.user._id.toString()){
+        throw new ApiError(403 , "Only owner can delete")
+    }
+
+    await Tweet.findByIdAndDelete(tweetId)
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200 , "Tweet deleted")
+    )
+})
+
+const updateTweet = asyncHandler(async(req,res)=>{
+    const {tweetId} = req.params
+
+    if(!tweetId || !mongoose.Types.ObjectId.isValid(tweetId)){
+        throw new ApiError(400 , "Tweet id is required")
+    }
+    const tweet = await Tweet.findById(tweetId)
+
+    if(!tweet){
+        throw new ApiError(404 , "Tweet not found")
+    }
+
+    if(tweet.owner.toString()!==req.user._id.toString()){
+        throw new ApiError(403 , "Only owner can update")
+    }
+
+    const {content} = req.body
+    if(!content){
+        throw new ApiError(400 , "Content is required")
+    }
+
+    const updated = await Tweet.findByIdAndUpdate(
+        tweetId,
+        {content},
+        {new:true}
+    )
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(200 , updated , "Tweet is updated")
+    )
+})
+
 export {
     createTweet,
     getTweetbyTweetId,
-    getTweetbyUserId
+    getTweetbyUserId,
+    deleteTweet,
+    updateTweet
 }
