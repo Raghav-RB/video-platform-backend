@@ -43,6 +43,12 @@ app.use("/api/v1/tweet",tweetRouter)
 
 import subsRouter from "./routes/subscription.route.js"
 
-app.use("api/vi/subscription",subsRouter)
+app.use("/api/vi/subscription",subsRouter)
+
+// ======================================================================================
+
+import dashboardRouter from "./routes/dashboard.router.js"
+
+app.use("/api/v1/dashboard",dashboardRouter)
 
 export {app}
