@@ -51,4 +51,10 @@ import dashboardRouter from "./routes/dashboard.router.js"
 
 app.use("/api/v1/dashboard",dashboardRouter)
 
+// ======================================================================================
+
+import likeRouter from "./routes/like.router.js"
+
+app.use("/api/vi/likes",likeRouter)
+
 export {app}
