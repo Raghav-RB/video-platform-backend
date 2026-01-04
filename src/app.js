@@ -55,12 +55,18 @@ app.use("/api/v1/dashboard",dashboardRouter)
 
 import likeRouter from "./routes/like.router.js"
 
-app.use("/api/vi/likes",likeRouter)
+app.use("/api/v1/likes",likeRouter)
 
 // ======================================================================================
 
 import commentRouter from "./routes/comment.router.js"
 
 app.use("/api/v1/comments",commentRouter)
+
+// ======================================================================================
+
+import playlistRouter from "./routes/playlist.router.js"
+
+app.use("/api/v1/playlist",playlistRouter)
 
 export {app}
