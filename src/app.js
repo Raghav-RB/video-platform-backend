@@ -57,4 +57,10 @@ import likeRouter from "./routes/like.router.js"
 
 app.use("/api/vi/likes",likeRouter)
 
+// ======================================================================================
+
+import commentRouter from "./routes/comment.router.js"
+
+app.use("/api/v1/comments",commentRouter)
+
 export {app}
